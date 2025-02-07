@@ -7,5 +7,5 @@ using namespace std;
 using namespace c7x;
 
 void validate(int iteration,int iteration2);
-void validate_2d_int16_t(int row,int col,vector<vector<int16_t>> mat1,vector<vector<int16_t>> mat2);
-void get_random_value_for_2d_int16_t(int row,int col,vector<vector<int16_t>>& mat);
+void validate_2d_int16_t(int row,int col,int16_t *res1Idx,int16_t *res2Idx);
+void get_random_value_for_2d_int16_t(int row,int col,int16_t *mIdx);
