@@ -1,4 +1,8 @@
-#include<iostream>
+/*
+To run
+cd scripts
+./mat_mul.sh
+*/
 #include "utils.h"
 int main(){
     int rsize = 32;
