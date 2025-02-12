@@ -27,37 +27,28 @@ int main() {
             input[2][r][c] = (int)pixel[2];
         }
     }
-    float *rIdx=&input[0][0][0];
-    float *gIdx=&input[1][0][0];
-    float *bIdx=&input[2][0][0];
-    float *outIdx=&output[0][0];
-    int times = (height * width) / 32;
-    for(int t = 0;t < times;t++){
-        float_vec R = (float_vec)(0.299);
-        float_vec G = (float_vec)(0.587);
-        float_vec B = (float_vec)(0.114);
-        float_vec vE1 = *(float_vec *)rIdx;
-        float_vec vE2 = *(float_vec *)gIdx;
-        float_vec vE3 = *(float_vec *)bIdx;
-        float_vec qE1 = __vmpysp_vvv(R,vE1);
-        float_vec qE2 = __vmpysp_vvv(G,vE2);
-        float_vec qE3 = __vmpysp_vvv(B,vE3);
-        float_vec res = __vaddsp_vvv(vE1,vE2);
-        res = __vaddsp_vvv(res,vE3);
+    // transparency - alpha
+    //  brightness - r+b , g+b , b+b
+    int iteration = 0;
+    float *rIdx=&input[0][0][0],*gIdx=&input[1][0][0],*bIdx=&input[2][0][0],*outIdx=&output[0][0];
+    int times = (height * width) / vec_len;
+    float_vec R = (float_vec)(0.299),G = (float_vec)(0.587),B = (float_vec)(0.114);
+    for(int t = 0;t < times;t++,rIdx+=vec_len,gIdx+=vec_len,bIdx+=vec_len,outIdx+=vec_len,iteration++){
+        // R*0.299 + G*0.587 + B*0.114
+        float_vec res = __vaddsp_vvv(__vmpysp_vvv(R,*(float_vec *)rIdx), __vmpysp_vvv(G,*(float_vec *)gIdx));
+        res = __vaddsp_vvv(res,__vmpysp_vvv(B,*(float_vec *)bIdx));
         *(float_vec *) (outIdx) = res;
-        rIdx+=vec_len;
-        gIdx+=vec_len;
-        bIdx+=vec_len;
-        outIdx+=vec_len;
     }
     for(int idx = times * vec_len;idx < height*width;idx++){
         outIdx[idx - times * vec_len] = (rIdx[idx - times * vec_len] * 0.299) + (gIdx[idx - times * vec_len] * 0.587) + (bIdx[idx - times * vec_len] * 0.114);
+        iteration++;
     }
     cout << "Output Dimensions: "<< height << " x " << width << endl;
     Mat gray_image(height, width, CV_32F, output);  
-    normalize(gray_image, gray_image, 0, 255, NORM_MINMAX);
     gray_image.convertTo(gray_image, CV_8U);
     imwrite("output.jpg", gray_image);
+    cout<<"Iteration : "<<iteration<<endl;
 }
 
 // http://www.codebind.com/cpp-tutorial/install-opencv-ubuntu-cpp/
+
