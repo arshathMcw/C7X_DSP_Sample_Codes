@@ -6,6 +6,7 @@ using namespace std;
 using namespace cv;
 using namespace c7x;
 int main() {
+    cout<<"RGB To Gray Scale Conversion using Intrinsics"<<endl;
     Mat image = imread("image.jpg");
     if (image.empty()) {
         cout << "Could not open or find the image!" << endl;
@@ -17,7 +18,7 @@ int main() {
     int width = image.cols;
     float input[channel][height][width];
     float output[height][width];
-    cout << "Image Dimensions: " << height << " x " << width << endl;
+    cout << "Image Dimensions: " <<channel<<" x "<< height << " x " << width << endl;
     for (int r = 0; r < height; r++) {
         for (int c = 0; c < width; c++) {
             Vec3b pixel = image.at<Vec3b>(r, c);
@@ -32,24 +33,27 @@ int main() {
     float *outIdx=&output[0][0];
     int times = (height * width) / 32;
     for(int t = 0;t < times;t++){
-        float_vec vOutC = (float_vec)(0);
         float_vec R = (float_vec)(0.299);
         float_vec G = (float_vec)(0.587);
         float_vec B = (float_vec)(0.114);
         float_vec vE1 = *(float_vec *)rIdx;
         float_vec vE2 = *(float_vec *)gIdx;
         float_vec vE3 = *(float_vec *)bIdx;
-        vOutC = (vE1*R) + (vE2*G) + (vE3*B);
-        *(float_vec *) (outIdx) = vOutC;
+        float_vec qE1 = __vmpysp_vvv(R,vE1);
+        float_vec qE2 = __vmpysp_vvv(G,vE2);
+        float_vec qE3 = __vmpysp_vvv(B,vE3);
+        float_vec res = __vaddsp_vvv(vE1,vE2);
+        res = __vaddsp_vvv(res,vE3);
+        *(float_vec *) (outIdx) = res;
         rIdx+=vec_len;
         gIdx+=vec_len;
         bIdx+=vec_len;
         outIdx+=vec_len;
     }
-    // For remainng index values
     for(int idx = times * vec_len;idx < height*width;idx++){
         outIdx[idx - times * vec_len] = (rIdx[idx - times * vec_len] * 0.299) + (gIdx[idx - times * vec_len] * 0.587) + (bIdx[idx - times * vec_len] * 0.114);
     }
+    cout << "Output Dimensions: "<< height << " x " << width << endl;
     Mat gray_image(height, width, CV_32F, output);  
     normalize(gray_image, gray_image, 0, 255, NORM_MINMAX);
     gray_image.convertTo(gray_image, CV_8U);
