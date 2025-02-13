@@ -1,3 +1,9 @@
+/*
+To run this
+cd scripts
+./3d_mat_sub.sh
+*/
+
 #include "utils.h"
 void matrix_sub_optimized(int row,int col,int depth,int16_t *aIdx,int16_t *bIdx,int16_t *rIdx,int &iteration){
     int times = (row * col * depth) / 32;
