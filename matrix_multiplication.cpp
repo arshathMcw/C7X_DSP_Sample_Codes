@@ -6,10 +6,10 @@ cd scripts
 #include "utils.h"
 int main(){
     //  col 1 and row2 need to be same :)
-    int row1 = 133;
-    int col1 = 99;
-    int row2 = 99;
-    int col2 = 33;
+    int row1 = 100;
+    int col1 = 23;
+    int row2 = 23;
+    int col2 = 100;
     const int vec_len = element_count_of<int_vec>::value;
     int32_t mat1[row1][col1];
     int32_t mat2[row2][col2];
@@ -54,10 +54,8 @@ int main(){
             int_vec vOutC = (int_vec)(0);
             mat2Idx = &mat2[0][c];
             for(int cc = 0;cc < col1;cc+=1){
-                int_vec pp = (int_vec)(mat1[r][cc]);
-                int_vec vE1 = *(int_vec *)mat2Idx;
-                int_vec resw = pp * vE1;
-                vOutC = vOutC + resw;
+                int_vec resw = __vmpyww_vvv(*(int_vec *)mat2Idx,(int_vec)(mat1[r][cc]));
+                vOutC = __vaddw_vvv(vOutC,resw);
                 iteration2++;
                 mat2Idx = &mat2[cc+1][c];
             }

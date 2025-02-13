@@ -5,6 +5,7 @@
 using namespace std;
 using namespace cv;
 using namespace c7x;
+// __vaddw_vkv
 int main() {
     float red,green,blue;
     cout<<"Enter Brightness for Red : ";
