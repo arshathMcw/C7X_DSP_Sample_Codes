@@ -5,26 +5,28 @@ cd scripts
 */
 #include "utils.h"
 int main(){
-    int row1 = 100;
-    int col1 = 96;
-    int row2 = 96;
-    int col2 = 320;
-    int16_t mat1[row1][col1];
-    int16_t mat2[row2][col2];
-    int16_t res[row1][col2];
-    int16_t res2[row1][col2];
-    int16_t *mat1Idx=&mat1[0][0];
-    int16_t *mat2Idx=&mat2[0][0];
-    int16_t *res2Idx=&res2[0][0];
+    //  col 1 and row2 need to be same :)
+    int row1 = 133;
+    int col1 = 99;
+    int row2 = 99;
+    int col2 = 33;
+    const int vec_len = element_count_of<int_vec>::value;
+    int32_t mat1[row1][col1];
+    int32_t mat2[row2][col2];
+    int32_t res[row1][col2];
+    int32_t res2[row1][col2];
+    int32_t *mat1Idx=&mat1[0][0];
+    int32_t *mat2Idx=&mat2[0][0];
+    int32_t *res2Idx=&res2[0][0];
     int iteration1, iteration2;
     for(int r = 0;r < row1;r++){
         for(int c =0;c < col1;c++){
-            mat1[r][c] =  2;
+            mat1[r][c] =  r+c;
         }
     }
     for(int r = 0;r < row2;r++){
         for(int c =0;c < col2;c++){
-            mat2[r][c] =  3;
+            mat2[r][c] =  r+c;
         }
     }
     for(int r = 0;r < row1;r++){
@@ -37,36 +39,47 @@ int main(){
         for(int c =0;c < col2;c++){
             for(int k = 0;k < col1;k++){
                 res[r][c] += mat1[r][k] * mat2[k][c];
-                iteration1++;
+                iteration1++;   
             }
         }
     }
     int outr = row1;
     int ourc = col2;
+    int rem = col2 % vec_len;
+    int start = col2 - rem;
     for(int r = 0;r < row1;r++){
         mat2Idx = &mat2[0][0];
-        for(int c = 0;c < col2;c+=32){
-            short_vec vOutC = (short_vec)(0);
-            for(int c = 0;c < col1;c+=1){
-                short_vec pp = (short_vec)(mat1[r][c]);
-                short_vec vE1 = *(short_vec *)mat2Idx;
-                short_vec resw = pp * vE1;
+        res2Idx = &res2[r][0];
+        for(int c = 0;c+vec_len <= col2;c+=vec_len){
+            int_vec vOutC = (int_vec)(0);
+            mat2Idx = &mat2[0][c];
+            for(int cc = 0;cc < col1;cc+=1){
+                int_vec pp = (int_vec)(mat1[r][cc]);
+                int_vec vE1 = *(int_vec *)mat2Idx;
+                int_vec resw = pp * vE1;
                 vOutC = vOutC + resw;
                 iteration2++;
-                mat2Idx+=32;
+                mat2Idx = &mat2[cc+1][c];
             }
-            *(short_vec *) (res2Idx) = vOutC;
-            res2Idx += 32;
+            *(int_vec *) (res2Idx) = vOutC;
+            res2Idx += vec_len;
+        }
+        for(int x = start;x < col2;x++){
+            for(int k = 0;k < col1;k++){
+                res2[r][x] += mat1[r][k] * mat2[k][x];
+                iteration1++;   
+            }
         }
     }
+    int flag = 1;
     for(int r = 0;r < row1;r++){
         for(int c = 0;c < col2;c++){
-            if(res[r][c] != res2[r][c] ){
-                cout<<"False :(";
-                return 0;
+            if(res[r][c] != res2[r][c]) {     
+                cout<<"They are not equal"<<endl;
             }
         }
     }
     cout<<"Iteration 1 : "<<iteration1<<endl;
     cout<<"Iteration 2 : "<<iteration2<<endl;
+    cout<<(iteration1/iteration2)<<" times better"<<endl;
 }
