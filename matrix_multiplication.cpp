@@ -6,19 +6,20 @@ cd scripts
 #include "utils.h"
 int main(){
     //  col 1 and row2 need to be same :)
-    int row1 = 100;
-    int col1 = 23;
-    int row2 = 23;
-    int col2 = 100;
-    const int vec_len = element_count_of<int_vec>::value;
-    int32_t mat1[row1][col1];
-    int32_t mat2[row2][col2];
-    int32_t res[row1][col2];
-    int32_t res2[row1][col2];
-    int32_t *mat1Idx=&mat1[0][0];
-    int32_t *mat2Idx=&mat2[0][0];
-    int32_t *res2Idx=&res2[0][0];
-    int iteration1, iteration2;
+    int row1,col1,row2,col2,vec_len = element_count_of<int_vec>::value,iteration1, iteration2;
+    cout<<"Enter the Row Size for Matrix 1 : ";
+    cin>>row1;
+    cout<<"Enter the Column Size for Matrix 1 : ";
+    cin>>col1;
+    cout<<"Enter the Row Size for Matrix 2 : ";
+    cin>>row2;
+    cout<<"Enter the Column Size for Matrix 2 : ";
+    cin>>col2;
+    if(row2 != col1){
+        cout<<"This is not a valid matrix to do multiplication";
+        return 0;
+    }
+    int32_t mat1[row1][col1],mat2[row2][col2],res[row1][col2],res2[row1][col2] ,*mat1Idx=&mat1[0][0],*mat2Idx=&mat2[0][0],*res2Idx=&res2[0][0];
     for(int r = 0;r < row1;r++){
         for(int c =0;c < col1;c++){
             mat1[r][c] =  r+c;
@@ -43,8 +44,6 @@ int main(){
             }
         }
     }
-    int outr = row1;
-    int ourc = col2;
     int rem = col2 % vec_len;
     int start = col2 - rem;
     for(int r = 0;r < row1;r++){
@@ -69,7 +68,6 @@ int main(){
             }
         }
     }
-    int flag = 1;
     for(int r = 0;r < row1;r++){
         for(int c = 0;c < col2;c++){
             if(res[r][c] != res2[r][c]) {     
