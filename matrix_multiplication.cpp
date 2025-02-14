@@ -61,6 +61,7 @@ int main(){
             *(int_vec *) (res2Idx) = vOutC;
             res2Idx += vec_len;
         }
+        //  For Remaining Index
         for(int x = start;x < col2;x++){
             for(int k = 0;k < col1;k++){
                 res2[r][x] += mat1[r][k] * mat2[k][x];
@@ -77,5 +78,5 @@ int main(){
     }
     cout<<"Iteration 1 : "<<iteration1<<endl;
     cout<<"Iteration 2 : "<<iteration2<<endl;
-    cout<<(iteration1/iteration2)<<" times better"<<endl;
+    cout<<"Intrinsics is "<<(iteration1/iteration2)<<" times better than "<<endl;
 }
