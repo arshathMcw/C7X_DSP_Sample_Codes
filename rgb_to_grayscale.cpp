@@ -27,8 +27,6 @@ int main() {
             input[2][r][c] = (int)pixel[2];
         }
     }
-    // transparency - alpha
-    //  brightness - r+b , g+b , b+b
     int iteration = 0;
     float *rIdx=&input[0][0][0],*gIdx=&input[1][0][0],*bIdx=&input[2][0][0],*outIdx=&output[0][0];
     int times = (height * width) / vec_len;
