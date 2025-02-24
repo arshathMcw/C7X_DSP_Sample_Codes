@@ -53,3 +53,7 @@ int main(){
     validate_3d_int16_t(row,col,depth,resIdx,res2Idx);
     validate(iteration1,iteration2);
 }
+
+
+
+

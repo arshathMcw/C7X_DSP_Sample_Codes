@@ -78,5 +78,5 @@ int main(){
     }
     cout<<"Iteration 1 : "<<iteration1<<endl;
     cout<<"Iteration 2 : "<<iteration2<<endl;
-    cout<<"Intrinsics is "<<(iteration1/iteration2)<<" times better than "<<endl;
+    cout<<"Intrinsics Code is "<<(iteration1/iteration2)<<" times better than Scalar Code"<<endl;
 }
