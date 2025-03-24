@@ -1,4 +1,5 @@
-* Scalar Addition
+# Hi All , In this repo i learned about C7x DSP code which have scalar,vectorization and intrinsics
+## Scalar Addition
 ```cpp
 #include <iostream>
 #include <c7x.h>
@@ -38,7 +39,7 @@ int main(){
 }
 
 ```
-* Addition with the vector
+## Addition with the vector
 ```cpp
 #include <iostream>
 #include <c7x.h>
@@ -157,7 +158,7 @@ int main(){
 	return 0;
 }
 ```
-## Matrix Multiplication
+## Matrix Multiplication using Vectorization
 ```cpp
 int main(){
     int rsize = 32;
@@ -196,62 +197,12 @@ int main(){
     cout<<dec;
 }
 ```
-## Convolution Operation
-* Resource : [Link](https://medium.com/@abhishekjainindore24/detailed-understanding-about-convolution-operation-in-a-coloured-image-with-the-help-of-3d-kernels-16d698645988)
-```cpp
-
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-https://makefiletutorial.com/
+## Other Vectorization and intrinsics codes
+* 1D FIR Operation : [click here](./1D_FIR.cpp)
+* Matrix Addition : [click here](./matrix_addition.cpp)
+* 3D Matrix Addition : [click here](./3d_matrix_addition.cpp)
+* Matrix Subtraction : [click here](./matrix_subtraction.cpp)
+* 3D Matrix Subtraction : [click here](./3d_matrix_subtraction.cpp)
+* Matrix Multiplication : [click here](./matrix_multiplication.cpp)
+* RGB to GrayScale : [click here](./rgb_to_grayscale.cpp)
+* Brightness Conversion : [click here](./brightness.cpp )
